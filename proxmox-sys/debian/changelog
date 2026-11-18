@@ -1,3 +1,12 @@
+rust-proxmox-sys (1.0.4-1+s390x1) trixie; urgency=medium
+
+  * s390x port: fs: fix build on s390x where statfs f_type is u32.
+
+  * s390x port: timer: don't build libc::sigaction as a struct literal, it has
+    private padding fields on s390x.
+
+ -- Yvan Janssens <yvanj@cyber.gent>  Wed, 18 Nov 2026 08:52:03 +0100
+
 rust-proxmox-sys (1.0.4-1) trixie; urgency=medium
 
   * fs: also sync the parent directory when replacing a file with fsync
