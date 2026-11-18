@@ -256,14 +256,14 @@ fn do_setup_timeout_handler() -> io::Result<()> {
             return Err(io::Error::last_os_error());
         }
 
-        let sa = libc::sigaction {
-            sa_sigaction:
-                // libc::sigaction uses `usize` for the function pointer...
-                sig_timeout_handler as *const extern "C" fn(i32) as usize,
-            sa_mask: sa_mask.assume_init(),
-            sa_flags: 0,
-            sa_restorer: None,
-        };
+        // Not a struct literal: on some targets (e.g. s390x) libc::sigaction has private padding
+        // fields, so zero-initialize it and set the fields we need.
+        let mut sa: libc::sigaction = std::mem::zeroed();
+        // libc::sigaction uses `usize` for the function pointer...
+        sa.sa_sigaction = sig_timeout_handler as *const extern "C" fn(i32) as usize;
+        sa.sa_mask = sa_mask.assume_init();
+        sa.sa_flags = 0;
+        sa.sa_restorer = None;
         if libc::sigaction(SIGTIMEOUT.0, &sa, std::ptr::null_mut()) != 0 {
             return Err(io::Error::last_os_error());
         }
