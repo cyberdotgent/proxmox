@@ -164,13 +164,17 @@ pub fn fs_info<P: ?Sized + nix::NixPath>(path: &P) -> nix::Result<FileSystemInfo
         stat.f_frsize as u64
     };
 
+    // f_type is __fsword_t: i64 on most 64-bit targets, but u32 on s390x
+    #[allow(clippy::unnecessary_cast)]
+    let fs_type = stat.f_type as i64;
+
     Ok(FileSystemInformation {
         total: stat.f_blocks * block_size,
         used: (stat.f_blocks - stat.f_bfree) * block_size,
         available: stat.f_bavail * block_size,
         total_inodes: stat.f_files,
         free_inodes: stat.f_ffree,
-        fs_type: stat.f_type,
+        fs_type,
         fs_id: stat.f_fsid,
     })
 }
