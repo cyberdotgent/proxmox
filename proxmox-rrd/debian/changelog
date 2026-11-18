@@ -1,3 +1,10 @@
+rust-proxmox-rrd (1.0.3-1+s390x1) trixie; urgency=medium
+
+  * s390x port: skip the RRD v1 upgrade test on big-endian hosts (the v1
+    test file is a little-endian host-order dump).
+
+ -- Yvan Janssens <yvanj@cyber.gent>  Wed, 18 Nov 2026 12:51:23 +0100
+
 rust-proxmox-rrd (1.0.3-1) trixie; urgency=medium
 
   * journal: discard incomplete trailing entries before appending after
