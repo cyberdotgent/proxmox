@@ -25,6 +25,8 @@ const RRD_V2_FN: &str = "./tests/testdata/cpu.rrd_v2";
 // make sure we can load and convert RRD v1
 #[test]
 #[cfg(feature = "rrd_v1")]
+// v1 files are raw host-order dumps, the test file is little-endian
+#[cfg_attr(target_endian = "big", ignore)]
 fn upgrade_from_rrd_v1() -> Result<(), Error> {
     const RRD_V1_FN: &str = "./tests/testdata/cpu.rrd_v1";
     let rrd = Database::load(Path::new(RRD_V1_FN), true)?;
